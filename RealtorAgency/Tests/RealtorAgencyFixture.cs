@@ -17,11 +17,11 @@ public static class RealtorAgencyFixture
     {
         var clients = new[]
         {
-            new Client { FullName = "Иванов Иван Иванович", PassportNumber = "1234 567890", ContactPhone = "+7 (900) 111-22-33" },
-            new Client { FullName = "Петров Пётр Петрович", PassportNumber = "2345 678901", ContactPhone = "+7 (901) 222-33-44" },
-            new Client { FullName = "Сидоров Алексей Сергеевич", PassportNumber = "3456 789012", ContactPhone = "+7 (902) 333-44-55" },
-            new Client { FullName = "Кузнецов Дмитрий Андреевич", PassportNumber = "4567 890123", ContactPhone = "+7 (903) 444-55-66" },
-            new Client { FullName = "Смирнов Сергей Владимирович", PassportNumber = "5678 901234", ContactPhone = "+7 (904) 555-66-77" }
+            new Client { FullName = "Ivanov Ivan Ivanovich", PassportNumber = "1234 567890", ContactPhone = "+7 (900) 111-22-33" },
+            new Client { FullName = "Petrov Petr Petrovich", PassportNumber = "2345 678901", ContactPhone = "+7 (901) 222-33-44" },
+            new Client { FullName = "Sidorov Alexey Sidorovich", PassportNumber = "3456 789012", ContactPhone = "+7 (902) 333-44-55" },
+            new Client { FullName = "Markelov Rodion Sergeevich", PassportNumber = "4567 890123", ContactPhone = "+7 (903) 444-55-66" },
+            new Client { FullName = "Smirnov Sergey Ivanovich", PassportNumber = "5678 901234", ContactPhone = "+7 (904) 555-66-77" }
         };
 
         var properties = new[]

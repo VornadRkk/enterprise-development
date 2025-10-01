@@ -25,9 +25,9 @@ public class RealtorAgencyTest
             .ToList();
 
         Assert.Equal(3, sellers.Count);
-        Assert.Contains(sellers, c => c.FullName == "Иванов Иван Иванович");
-        Assert.Contains(sellers, c => c.FullName == "Петров Пётр Петрович");
-        Assert.Contains(sellers, c => c.FullName == "Сидоров Алексей Сергеевич");
+        Assert.Contains(sellers, c => c.FullName == "Ivanov Ivan Ivanovich");
+        Assert.Contains(sellers, c => c.FullName == "Petrov Petr Petrovich");
+        Assert.Contains(sellers, c => c.FullName == "Sidorov Alexey Sidorovich");
     }
 
     /// <summary>
@@ -55,10 +55,10 @@ public class RealtorAgencyTest
             .ToList();
 
         Assert.Equal(2, topSellers.First().Count);
-        Assert.Equal("Иванов Иван Иванович", topSellers.First().Client.FullName);
+        Assert.Equal("Ivanov Ivan Ivanovich", topSellers.First().Client.FullName);
 
         Assert.Equal(3, topBuyers.First().Count);
-        Assert.Equal("Кузнецов Дмитрий Андреевич", topBuyers.First().Client.FullName);
+        Assert.Equal("Markelov Rodion Sergeevich", topBuyers.First().Client.FullName);
     }
 
     /// <summary>
@@ -94,7 +94,7 @@ public class RealtorAgencyTest
             .ToList();
 
         Assert.Single(clients);
-        Assert.Equal("Кузнецов Дмитрий Андреевич", clients[0].FullName);
+        Assert.Equal("Markelov Rodion Sergeevich", clients[0].FullName);
         Assert.Equal(4_500_000m, minAmount);
     }
 
@@ -115,7 +115,7 @@ public class RealtorAgencyTest
             .ToList();
 
         Assert.Equal(2, clients.Count);
-        Assert.Equal("Кузнецов Дмитрий Андреевич", clients[0].FullName);
-        Assert.Equal("Смирнов Сергей Владимирович", clients[1].FullName);
+        Assert.Equal("Markelov Rodion Sergeevich", clients[0].FullName);
+        Assert.Equal("Smirnov Sergey Ivanovich", clients[1].FullName);
     }
 }

@@ -1,4 +1,4 @@
-namespace Domain;
+﻿namespace Domain;
 
 /// <summary>
 /// Represents a client request to buy or sell a real estate property.
@@ -29,4 +29,9 @@ public class Request
     /// Gets or sets the monetary amount.
     /// </summary>
     public required decimal Amount { get; set; }
+
+    /// <summary>
+    /// Gets or sets the date when the request was created
+    /// </summary>
+    public DateTime Date { get; set; }
 }

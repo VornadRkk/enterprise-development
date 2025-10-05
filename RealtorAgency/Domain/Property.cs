@@ -1,4 +1,4 @@
-namespace Domain;
+﻿namespace Domain;
 
 /// <summary>
 /// Represents a real estate property.
@@ -23,7 +23,7 @@ public class Property
     /// <summary>
     /// Gets or sets the cadastral number of the property.
     /// </summary>
-    public required string CadastreNumber { get; set; }
+    public required string CadastralNumber { get; set; }
 
     /// <summary>
     /// Gets or sets the physical address of the property.

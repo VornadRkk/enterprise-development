@@ -1,4 +1,4 @@
-namespace Domain;
+﻿namespace Domain;
 
 /// <summary>
 /// Represents the intended use or purpose of a real estate property.

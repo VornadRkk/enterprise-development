@@ -1,4 +1,4 @@
-namespace Domain;
+﻿namespace Domain;
 
 /// <summary>
 /// Represents a client (counterparty) interacting with the real estate agency.
@@ -11,7 +11,7 @@ public class Client
     public int Id { get; set; }
 
     /// <summary>
-    /// Gets or sets the full name  of the client.
+    /// Gets or sets the full name of the client.
     /// </summary>
     public required string FullName { get; set; }
 

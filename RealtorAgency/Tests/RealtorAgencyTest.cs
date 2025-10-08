@@ -13,7 +13,7 @@ public class RealtorAgencyTest(RealtorAgencyFixture fixture) : IClassFixture<Rea
     [Fact]
     public void GetSellersInPeriod_ReturnsCorrectSellers()
     {
-        // Arrange
+        
         var startDate = new DateTime(2024, 1, 1);
         var endDate = new DateTime(2024, 12, 31);
         var expectedCount = 3;
@@ -24,7 +24,7 @@ public class RealtorAgencyTest(RealtorAgencyFixture fixture) : IClassFixture<Rea
             "Sidorov Alexey Sidorovich"
         };
 
-        // Act
+        
         var sellers = fixture.Requests
             .Where(r => r.Type == RequestType.Sale && r.Date >= startDate && r.Date <= endDate)
             .Select(r => r.Client)
@@ -32,7 +32,7 @@ public class RealtorAgencyTest(RealtorAgencyFixture fixture) : IClassFixture<Rea
             .OrderBy(c => c.FullName)
             .ToList();
 
-        // Assert
+        
         Assert.Equal(expectedCount, sellers.Count);
         Assert.Equal(expectedSellerNames, sellers.Select(s => s.FullName));
     }
@@ -43,13 +43,13 @@ public class RealtorAgencyTest(RealtorAgencyFixture fixture) : IClassFixture<Rea
     [Fact]
     public void GetTopSellersByRequestCount_SeparateByType_ReturnsCorrectTop()
     {
-        // Arrange
+        
         var expectedTopSellerCount = 1;
         var expectedTopSellerName = "Ivanov Ivan Ivanovich";
         var expectedTopBuyerCount = 1;
         var expectedTopBuyerName = "Markelov Rodion Sergeevich";
 
-        // Act
+        
         var topSellers = fixture.Requests
             .Where(r => r.Type == RequestType.Sale)
             .GroupBy(r => r.Client)
@@ -66,7 +66,7 @@ public class RealtorAgencyTest(RealtorAgencyFixture fixture) : IClassFixture<Rea
             .Take(5)
             .ToList();
 
-        // Assert
+        
         Assert.Equal(expectedTopSellerCount, topSellers.First().Count);
         Assert.Equal(expectedTopSellerName, topSellers.First().Client.FullName);
         Assert.Equal(expectedTopBuyerCount, topBuyers.First().Count);
@@ -79,7 +79,7 @@ public class RealtorAgencyTest(RealtorAgencyFixture fixture) : IClassFixture<Rea
     [Fact]
     public void GetRequestCountByPropertyType_ReturnsCorrectCounts()
     {
-        // Arrange
+        
         var expectedCounts = new Dictionary<PropertyType, int>
         {
             { PropertyType.Apartment, 3 },
@@ -87,12 +87,12 @@ public class RealtorAgencyTest(RealtorAgencyFixture fixture) : IClassFixture<Rea
             { PropertyType.Office, 2 }
         };
 
-        // Act
+        
         var counts = fixture.Requests
             .GroupBy(r => r.Property.Type)
             .ToDictionary(g => g.Key, g => g.Count());
 
-        // Assert
+        
         Assert.Equal(expectedCounts, counts);
     }
 
@@ -102,12 +102,12 @@ public class RealtorAgencyTest(RealtorAgencyFixture fixture) : IClassFixture<Rea
     [Fact]
     public void GetClientsWithMinAmountRequest_ReturnsCorrectClients()
     {
-        // Arrange
+        
         var expectedClientCount = 1;
-        var expectedClientName = "Markelov Rodion Sergeevich";
+        var expectedClientNames = new[] { "Markelov Rodion Sergeevich" };
         var expectedMinAmount = 4_500_000m;
 
-        // Act
+        
         var minAmount = fixture.Requests.Min(r => r.Amount);
 
         var clients = fixture.Requests
@@ -116,9 +116,9 @@ public class RealtorAgencyTest(RealtorAgencyFixture fixture) : IClassFixture<Rea
             .DistinctBy(c => c.Id)
             .ToList();
 
-        // Assert
+        
         Assert.Equal(expectedClientCount, clients.Count);
-        Assert.Equal(expectedClientName, clients[0].FullName);
+        Assert.Equal(expectedClientNames, clients.Select(c => c.FullName));
         Assert.Equal(expectedMinAmount, minAmount);
     }
 
@@ -128,7 +128,7 @@ public class RealtorAgencyTest(RealtorAgencyFixture fixture) : IClassFixture<Rea
     [Fact]
     public void GetClientsSearchingForPropertyType_OrderedByName_ReturnsCorrectList()
     {
-        // Arrange
+        
         var propertyType = PropertyType.Apartment;
         var expectedClientCount = 2;
         var expectedClientNames = new[]
@@ -137,7 +137,7 @@ public class RealtorAgencyTest(RealtorAgencyFixture fixture) : IClassFixture<Rea
             "Smirnov Sergey Ivanovich"
         };
 
-        // Act
+        
         var clients = fixture.Requests
             .Where(r => r.Type == RequestType.Purchase && r.Property.Type == propertyType)
             .Select(r => r.Client)
@@ -145,7 +145,7 @@ public class RealtorAgencyTest(RealtorAgencyFixture fixture) : IClassFixture<Rea
             .OrderBy(c => c.FullName)
             .ToList();
 
-        // Assert
+        
         Assert.Equal(expectedClientCount, clients.Count);
         Assert.Equal(expectedClientNames, clients.Select(c => c.FullName));
     }

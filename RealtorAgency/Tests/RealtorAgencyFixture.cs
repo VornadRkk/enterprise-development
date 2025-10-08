@@ -4,7 +4,7 @@ namespace Tests;
 
 public class RealtorAgencyFixture
 {
-    public List<Client> Clients =>
+    public static List<Client> Clients =>
     [
         new Client
         {

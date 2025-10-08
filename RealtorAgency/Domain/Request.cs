@@ -6,32 +6,32 @@
 public class Request
 {
     /// <summary>
-    /// ID
+    /// Unique identifier of the request.
     /// </summary>
     public int Id { get; set; }
 
     /// <summary>
-    /// Gets or sets the client.
+    /// Client associated with the request.
     /// </summary>
     public required Client Client { get; set; }
 
     /// <summary>
-    /// Gets or sets the property.
+    /// Property associated with the request.
     /// </summary>
     public required Property Property { get; set; }
 
     /// <summary>
-    /// Gets or sets the type of the request.
+    /// Type of the request (sale or purchase).
     /// </summary>
     public required RequestType Type { get; set; }
 
     /// <summary>
-    /// Gets or sets the monetary amount.
+    /// Monetary amount of the request.
     /// </summary>
     public required decimal Amount { get; set; }
 
     /// <summary>
-    /// Gets or sets the date when the request was created
+    /// Date when the request was created.
     /// </summary>
     public DateTime Date { get; set; }
-}
+}   

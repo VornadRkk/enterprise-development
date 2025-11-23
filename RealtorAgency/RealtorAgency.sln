@@ -22,6 +22,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\
 		{D8D695E2-6CEC-402C-943C-CC766A6AAF0C} = {D8D695E2-6CEC-402C-943C-CC766A6AAF0C}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealtorAgency.AppHost", "RealtorAgency.AppHost\RealtorAgency.AppHost.csproj", "{A6BFF2A1-AAAE-404A-AADD-E430A473D48F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealtorAgency.ServiceDefaults", "RealtorAgency.ServiceDefaults\RealtorAgency.ServiceDefaults.csproj", "{83B5B4D0-ED48-FA7C-36F0-BA2285017484}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +52,14 @@ Global
 		{31D13DF6-16D9-48CD-917E-3CE4ACA859B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31D13DF6-16D9-48CD-917E-3CE4ACA859B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31D13DF6-16D9-48CD-917E-3CE4ACA859B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6BFF2A1-AAAE-404A-AADD-E430A473D48F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6BFF2A1-AAAE-404A-AADD-E430A473D48F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6BFF2A1-AAAE-404A-AADD-E430A473D48F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6BFF2A1-AAAE-404A-AADD-E430A473D48F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83B5B4D0-ED48-FA7C-36F0-BA2285017484}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83B5B4D0-ED48-FA7C-36F0-BA2285017484}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83B5B4D0-ED48-FA7C-36F0-BA2285017484}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83B5B4D0-ED48-FA7C-36F0-BA2285017484}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

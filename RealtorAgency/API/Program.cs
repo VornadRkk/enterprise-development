@@ -10,16 +10,19 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-// MySQL вместо PostgreSQL
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("DefaultConnection"),
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
+        new MySqlServerVersion(new Version(8, 0, 40)) 
     ));
 
-builder.Services.AddAutoMapper(typeof(AppMappingProfile).Assembly);
+builder.Services.AddAutoMapper(config =>
+{
+    config.AddProfile<AppMappingProfile>();
+});
 
-// Регистрация репозиториев для твоего проекта
+
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IPropertyRepository, PropertyRepository>();
 builder.Services.AddScoped<IRequestRepository, RequestRepository>();

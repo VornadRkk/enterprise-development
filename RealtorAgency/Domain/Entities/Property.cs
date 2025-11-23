@@ -1,4 +1,5 @@
-﻿namespace Domain;
+﻿using Domain.Enums;
+namespace Domain.Entities;
 
 /// <summary>
 /// Represents a real estate property.

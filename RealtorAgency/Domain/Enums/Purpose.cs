@@ -1,4 +1,4 @@
-﻿namespace Domain;
+﻿namespace Domain.Enums;
 
 /// <summary>
 /// Represents the intended use or purpose of a real estate property.

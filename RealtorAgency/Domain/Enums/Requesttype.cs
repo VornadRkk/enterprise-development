@@ -1,4 +1,4 @@
-﻿namespace Domain;
+﻿namespace Domain.Enums;
 
 /// <summary>
 /// Represents the type of a client request.

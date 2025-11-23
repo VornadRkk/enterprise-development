@@ -1,4 +1,4 @@
-﻿namespace Domain;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Represents a client (counterparty) interacting with the real estate agency.

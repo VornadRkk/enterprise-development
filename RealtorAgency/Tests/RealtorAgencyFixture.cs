@@ -1,5 +1,4 @@
 ﻿using RealtorAgency.Domain.Entities;
-using RealtorAgency.Domain.Enums;
 using RealtorAgency.Domain.TestData;
 
 namespace Tests;

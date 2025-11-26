@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\API\API.csproj" />
+    <ProjectReference Include="..\RealtorAgency.Api\RealtorAgency.Api.csproj" />
   </ItemGroup>
 
 </Project>

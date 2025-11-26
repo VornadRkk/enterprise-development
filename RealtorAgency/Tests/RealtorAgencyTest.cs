@@ -1,5 +1,4 @@
-﻿using Domain;
-using Domain.Enums;
+﻿using RealtorAgency.Domain.Enums;
 
 namespace Tests;
 
@@ -52,7 +51,7 @@ public class RealtorAgencyTest(RealtorAgencyFixture fixture) : IClassFixture<Rea
 
         
         var topSellers = fixture.Requests
-            .Where(r => r.Type == RequestType.Sale)
+            .Where(r => r.Type == RequestType.Sale) 
             .GroupBy(r => r.Client)
             .Select(g => new { Client = g.Key, Count = g.Count() })
             .OrderByDescending(x => x.Count)

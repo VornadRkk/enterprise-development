@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Domain\RealtorAgency.Domain.csproj" />
     <ProjectReference Include="..\RealtorAgency.Domain\RealtorAgency.Domain.csproj" />
   </ItemGroup>
 

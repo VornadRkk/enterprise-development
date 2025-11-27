@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RealtorAgency.Domain.Entities;
+
 namespace RealtorAgency.Infrastructure.Persistence;
 
 /// <summary>
@@ -34,15 +35,21 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<Client>(c =>
         {
             c.HasKey(c => c.Id);
+            c.ToTable("clients");
+
             c.Property(c => c.Id)
+                .HasColumnName("id")
                 .ValueGeneratedOnAdd();
             c.Property(c => c.FullName)
+                .HasColumnName("full_name")
                 .IsRequired()
                 .HasMaxLength(128);
             c.Property(c => c.PassportNumber)
+                .HasColumnName("passport_number")
                 .IsRequired()
                 .HasMaxLength(20);
             c.Property(c => c.ContactPhone)
+                .HasColumnName("contact_phone")
                 .IsRequired()
                 .HasMaxLength(20);
         });
@@ -50,60 +57,77 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<Property>(p =>
         {
             p.HasKey(p => p.Id);
+            p.ToTable("properties");
+
             p.Property(p => p.Id)
+                .HasColumnName("id")
                 .ValueGeneratedOnAdd();
             p.Property(p => p.Type)
+                .HasColumnName("type")
                 .HasConversion<string>()
                 .IsRequired();
             p.Property(p => p.Purpose)
+                .HasColumnName("purpose")
                 .HasConversion<string>()
                 .IsRequired();
             p.Property(p => p.CadastralNumber)
+                .HasColumnName("cadastral_number")
                 .IsRequired()
                 .HasMaxLength(50);
             p.Property(p => p.Address)
+                .HasColumnName("address")
                 .IsRequired()
                 .HasMaxLength(256);
             p.Property(p => p.Floors)
+                .HasColumnName("floors")
                 .IsRequired();
             p.Property(p => p.TotalArea)
+                .HasColumnName("total_area")
                 .IsRequired()
                 .HasPrecision(18, 2);
             p.Property(p => p.Rooms)
+                .HasColumnName("rooms")
                 .IsRequired();
             p.Property(p => p.CeilingHeight)
+                .HasColumnName("ceiling_height")
                 .IsRequired()
                 .HasPrecision(18, 2);
             p.Property(p => p.FloorNumber)
+                .HasColumnName("floor_number")
                 .IsRequired();
             p.Property(p => p.HasEncumbrances)
+                .HasColumnName("has_encumbrances")
                 .IsRequired();
         });
 
         modelBuilder.Entity<Request>(r =>
         {
             r.HasKey(r => r.Id);
-            r.Property(r => r.Id)
-                .ValueGeneratedOnAdd();
+            r.ToTable("requests");
 
+            r.Property(r => r.Id)
+                .HasColumnName("id")
+                .ValueGeneratedOnAdd();
+            r.Property(r => r.Type)
+                .HasColumnName("type")
+                .HasConversion<string>()
+                .IsRequired();
+            r.Property(r => r.Amount)
+                .HasColumnName("amount")
+                .IsRequired()
+                .HasPrecision(18, 2);
             r.Property(r => r.Date)
                 .HasColumnName("date")
                 .IsRequired();
 
             r.HasOne(r => r.Client)
                 .WithMany()
-                .HasForeignKey("ClientId")
+                .HasForeignKey("client_id")
                 .OnDelete(DeleteBehavior.Cascade);
             r.HasOne(r => r.Property)
                 .WithMany()
-                .HasForeignKey("PropertyId")
+                .HasForeignKey("property_id")
                 .OnDelete(DeleteBehavior.Cascade);
-            r.Property(r => r.Type)
-                .HasConversion<string>()
-                .IsRequired();
-            r.Property(r => r.Amount)
-                .IsRequired()
-                .HasPrecision(18, 2);
         });
     }
 }

@@ -18,7 +18,7 @@ public static class DbSeeder
     {
         if (!context.Clients.Any())
         {
-            context.Clients.AddRange(ClientTestData.GetClients());
+            context.Clients.AddRange(TestData.GetClients());
             await context.SaveChangesAsync();
         }
     }
@@ -31,7 +31,7 @@ public static class DbSeeder
     {
         if (!context.Properties.Any())
         {
-            context.Properties.AddRange(PropertyTestData.GetProperties());
+            context.Properties.AddRange(TestData.GetProperties());
             await context.SaveChangesAsync();
         }
     }
@@ -47,7 +47,7 @@ public static class DbSeeder
             var clients = await context.Clients.OrderBy(c => c.Id).ToListAsync();
             var properties = await context.Properties.OrderBy(p => p.Id).ToListAsync();
 
-            context.Requests.AddRange(RequestTestData.GetRequests(clients, properties));
+            context.Requests.AddRange(TestData.GetRequests(clients, properties));
             await context.SaveChangesAsync();
         }
     }

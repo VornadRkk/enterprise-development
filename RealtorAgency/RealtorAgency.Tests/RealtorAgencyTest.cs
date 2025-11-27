@@ -1,6 +1,6 @@
 ﻿using RealtorAgency.Domain.Enums;
 
-namespace Tests;
+namespace RealtorAgency.Tests;
 
 /// <summary>
 /// Contains unit tests for RealtorAgency domain logic

@@ -26,127 +26,145 @@ namespace RealtorAgency.Infrastructure.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ContactPhone")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("contact_phone");
 
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
+                        .HasColumnType("varchar(128)")
+                        .HasColumnName("full_name");
 
                     b.Property<string>("PassportNumber")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("passport_number");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Clients");
+                    b.ToTable("clients", (string)null);
                 });
 
             modelBuilder.Entity("RealtorAgency.Domain.Entities.Property", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
+                        .HasColumnType("varchar(256)")
+                        .HasColumnName("address");
 
                     b.Property<string>("CadastralNumber")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("cadastral_number");
 
                     b.Property<double>("CeilingHeight")
                         .HasPrecision(18, 2)
-                        .HasColumnType("double");
+                        .HasColumnType("double")
+                        .HasColumnName("ceiling_height");
 
                     b.Property<int>("FloorNumber")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("floor_number");
 
                     b.Property<int>("Floors")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("floors");
 
                     b.Property<bool>("HasEncumbrances")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("has_encumbrances");
 
                     b.Property<string>("Purpose")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("longtext")
+                        .HasColumnName("purpose");
 
                     b.Property<int>("Rooms")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("rooms");
 
                     b.Property<double>("TotalArea")
                         .HasPrecision(18, 2)
-                        .HasColumnType("double");
+                        .HasColumnType("double")
+                        .HasColumnName("total_area");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("longtext")
+                        .HasColumnName("type");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Properties");
+                    b.ToTable("properties", (string)null);
                 });
 
             modelBuilder.Entity("RealtorAgency.Domain.Entities.Request", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Amount")
                         .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("amount");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("date");
 
-                    b.Property<int>("PropertyId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("longtext")
+                        .HasColumnName("type");
+
+                    b.Property<int>("client_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("property_id")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("client_id");
 
-                    b.HasIndex("PropertyId");
+                    b.HasIndex("property_id");
 
-                    b.ToTable("Requests");
+                    b.ToTable("requests", (string)null);
                 });
 
             modelBuilder.Entity("RealtorAgency.Domain.Entities.Request", b =>
                 {
                     b.HasOne("RealtorAgency.Domain.Entities.Client", "Client")
                         .WithMany()
-                        .HasForeignKey("ClientId")
+                        .HasForeignKey("client_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("RealtorAgency.Domain.Entities.Property", "Property")
                         .WithMany()
-                        .HasForeignKey("PropertyId")
+                        .HasForeignKey("property_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

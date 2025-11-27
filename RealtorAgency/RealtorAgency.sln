@@ -5,7 +5,7 @@ VisualStudioVersion = 17.14.36518.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealtorAgency.Domain", "RealtorAgency.Domain\RealtorAgency.Domain.csproj", "{D8D695E2-6CEC-402C-943C-CC766A6AAF0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{35FA8802-4657-4FF4-A2B9-430ECAC1C460}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealtorAgency.Tests", "RealtorAgency.Tests\RealtorAgency.Tests.csproj", "{35FA8802-4657-4FF4-A2B9-430ECAC1C460}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealtorAgency.Infrastructure", "RealtorAgency.Infrastructure\RealtorAgency.Infrastructure.csproj", "{3F5CE7E8-306D-4AA6-B90D-62368FB16453}"
 EndProject

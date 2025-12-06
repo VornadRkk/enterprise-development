@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-RealtorAgency.Producer-f24aa418-76d8-4a20-a6a6-a7d5b4a68694</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.RabbitMQ.Client" Version="13.0.2" />
+    <PackageReference Include="Bogus" Version="35.6.5" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RealtorAgency.Application\RealtorAgency.Application.csproj" />
+    <ProjectReference Include="..\RealtorAgency.Domain\RealtorAgency.Domain.csproj" />
+    <ProjectReference Include="..\RealtorAgency.ServiceDefaults\RealtorAgency.ServiceDefaults.csproj" />
+  </ItemGroup>
+</Project>

@@ -129,7 +129,8 @@ public class RabbitMqConsumer(
         {
             using var scope = scopeFactory.CreateScope();
             var requestRepository = scope.ServiceProvider.GetRequiredService<IRepository<Request>>();
-
+            var clientRepository = scope.ServiceProvider.GetRequiredService<IRepository<Client>>();
+            var propertyRepository = scope.ServiceProvider.GetRequiredService<IRepository<Property>>();
             var requestDto = JsonSerializer.Deserialize<RequestEditDto>(json);
             if (requestDto == null)
             {
@@ -137,14 +138,33 @@ public class RabbitMqConsumer(
                 return;
             }
 
+            var client = await clientRepository.GetByIdAsync(requestDto.ClientId);
+            if (client == null)
+            {
+                logger.LogWarning("Client with ID {ClientId} not found. Skipping message.", requestDto.ClientId);
+                return;
+            }
+
+            var property = await propertyRepository.GetByIdAsync(requestDto.PropertyId);
+            if (property == null)
+            {
+                logger.LogWarning("Property with ID {PropertyId} not found. Skipping message.", requestDto.PropertyId);
+                return;
+            }
+
             var request = mapper.Map<Request>(requestDto);
+
+            request.Client = client;
+            request.Property = property;
+
             await requestRepository.AddAsync(request);
 
-            logger.LogInformation("Request successfully saved");
+            logger.LogInformation("Request successfully saved: ID not yet assigned, ClientId={ClientId}, PropertyId={PropertyId}, Type={Type}",
+                requestDto.ClientId, requestDto.PropertyId, requestDto.Type);
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error processing request");
+            logger.LogError(ex, "Error processing request. Raw JSON: {Json}", json);
             throw;
         }
     }

@@ -1,6 +1,7 @@
-using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using RabbitMQ.Client;
+using RealtorAgency.Api.Consumer;
 using RealtorAgency.Application;
 using RealtorAgency.Application.Mappers;
 using RealtorAgency.Application.Services;
@@ -8,6 +9,7 @@ using RealtorAgency.Domain.Entities;
 using RealtorAgency.Domain.Interfaces;
 using RealtorAgency.Infrastructure.Persistence;
 using RealtorAgency.Infrastructure.Repositories;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +25,24 @@ builder.Services.AddAutoMapper(config =>
 {
     config.AddProfile<AppMappingProfile>();
 });
+
+builder.Services.AddSingleton<IConnectionFactory>(serviceProvider =>
+{
+    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+    var connectionString = configuration.GetConnectionString("RabbitMQ");
+
+    if (string.IsNullOrEmpty(connectionString))
+    {
+        throw new InvalidOperationException("RabbitMQ connection string is not configured");
+    }
+
+    return new ConnectionFactory
+    {
+        Uri = new Uri(connectionString)
+    };
+});
+
+builder.Services.AddHostedService<RabbitMqConsumer>();
 
 builder.Services.AddScoped<IRepository<Client>, ClientRepository>();
 builder.Services.AddScoped<IRepository<Property>, PropertyRepository>();

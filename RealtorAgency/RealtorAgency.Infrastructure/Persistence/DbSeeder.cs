@@ -18,7 +18,7 @@ public static class DbSeeder
     {
         if (!context.Clients.Any())
         {
-            context.Clients.AddRange(TestData.GetClients());
+            context.Clients.AddRange(TestData.Clients);
             await context.SaveChangesAsync();
         }
     }
@@ -31,7 +31,7 @@ public static class DbSeeder
     {
         if (!context.Properties.Any())
         {
-            context.Properties.AddRange(TestData.GetProperties());
+            context.Properties.AddRange(TestData.Properties);
             await context.SaveChangesAsync();
         }
     }

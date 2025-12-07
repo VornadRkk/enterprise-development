@@ -60,15 +60,15 @@ public class RabbitMqProducer(
             {
                 attempt++;
                 var connection = await connectionFactory.CreateConnectionAsync(stoppingToken);
-                logger.LogInformation("Successfully connected to RabbitMQ on attempt {Attempt}", attempt);
+                logger.LogInformation("RabbitMQ connection established on try {Attempt}", attempt);
                 return connection;
             }
             catch (Exception ex)
             {
-                logger.LogWarning(ex, "Failed to connect to RabbitMQ on attempt {Attempt}", attempt);
+                logger.LogWarning(ex, "Connection to RabbitMQ failed (try {Attempt})", attempt);
                 if (attempt >= maxRetries)
                 {
-                    logger.LogError("Maximum retry attempts reached ({MaxRetries}). Throwing exception.", maxRetries);
+                    logger.LogError("Reached maximum connection attempts ({MaxRetries}). Unable to proceed.", maxRetries);
                     throw;
                 }
                 await Task.Delay(delayMs, stoppingToken);
@@ -115,14 +115,14 @@ public class RabbitMqProducer(
                         body: body,
                         cancellationToken: stoppingToken);
 
-                    logger.LogInformation("Sent message. RoutingKey: {RoutingKey}, Type: {Type}",
+                    logger.LogInformation("Message published to {RoutingKey}: {PayloadType}",
                         RoutingKey, payload.GetType().Name);
 
                     await Task.Delay(delayMs, stoppingToken);
                 }
                 catch (Exception ex) when (ex is not OperationCanceledException)
                 {
-                    logger.LogError(ex, "Error sending message");
+                    logger.LogError(ex, "Failed to publish message");
                     await Task.Delay(delayMs, stoppingToken);
                 }
             }

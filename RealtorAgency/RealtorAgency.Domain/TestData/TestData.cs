@@ -11,7 +11,7 @@ public static class TestData
     /// <summary>
     /// Gets static test data for Client entities.
     /// </summary>
-    public static List<Client> GetClients() =>
+    public static List<Client> Clients =>
     [
         new()
         {
@@ -88,7 +88,7 @@ public static class TestData
     /// <summary>
     /// Gets static test data for Property entities.
     /// </summary>
-    public static List<Property> GetProperties() =>
+    public static List<Property> Properties =>
     [
         new()
         {

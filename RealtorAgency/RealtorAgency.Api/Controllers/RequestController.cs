@@ -1,9 +1,10 @@
-﻿using RealtorAgency.Application.Dtos.RepositoryDtos;
-using AutoMapper;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using RealtorAgency.Application.Dtos.RepositoryDtos;
 using RealtorAgency.Domain.Entities;
 using RealtorAgency.Domain.Enums;
 using RealtorAgency.Domain.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 
 namespace RealtorAgency.Api.Controllers;
 
@@ -16,6 +17,7 @@ public class RequestController(
     IRepository<Request> requestRepository,
     IRepository<Client> clientRepository,
     IRepository<Property> propertyRepository,
+    ILogger<RequestController> logger,
     IMapper mapper
 ) : ControllerBase
 {
@@ -50,9 +52,19 @@ public class RequestController(
     [HttpDelete("{id:int}")]
     public async Task<ActionResult> DeleteRequestById(int id)
     {
-        await requestRepository.DeleteAsync(id);
+        try
+        {
+            await requestRepository.DeleteAsync(id);
+        }
+        catch (KeyNotFoundException)
+        {
+            logger.LogWarning("Request with id {Id} not found for deletion", id);
+        }
+
         return NoContent();
     }
+
+
 
     /// <summary>
     /// Creates a new request.
@@ -122,18 +134,15 @@ public class RequestController(
     /// <summary>
     /// Validates the RequestType and returns error message with available options if invalid.
     /// </summary>
-    private bool ValidateRequestType(string type, out string errorMessage)
+    private static bool ValidateRequestType(string type, out string errorMessage)
     {
         errorMessage = string.Empty;
 
-        // Получаем все допустимые значения enum
         var validTypes = Enum.GetNames(typeof(RequestType));
 
-        // Проверяем, является ли значение валидным
         if (Enum.IsDefined(typeof(RequestType), type))
             return true;
 
-        // Форматируем список допустимых значений
         var validTypesString = string.Join(", ", validTypes);
         errorMessage = $"Invalid request type: '{type}'. Allowed values: {validTypesString}";
 

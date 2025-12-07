@@ -1,9 +1,10 @@
-﻿using RealtorAgency.Application.Dtos.RepositoryDtos;
-using AutoMapper;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using RealtorAgency.Application;
+using RealtorAgency.Application.Dtos.RepositoryDtos;
 using RealtorAgency.Domain.Entities;
 using RealtorAgency.Domain.Enums;
 using RealtorAgency.Domain.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 
 namespace RealtorAgency.Api.Controllers;
 

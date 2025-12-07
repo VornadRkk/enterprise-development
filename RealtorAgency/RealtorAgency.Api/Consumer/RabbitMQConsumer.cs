@@ -35,15 +35,15 @@ public class RabbitMqConsumer(
             {
                 attempt++;
                 var connection = await connectionFactory.CreateConnectionAsync(stoppingToken);
-                logger.LogInformation("Successfully connected to RabbitMQ on attempt {Attempt}", attempt);
+                logger.LogInformation("RabbitMQ connection established on try {Attempt}", attempt);
                 return connection;
             }
             catch (Exception ex)
             {
-                logger.LogWarning(ex, "Failed to connect to RabbitMQ on attempt {Attempt}", attempt);
+                logger.LogWarning(ex, "Connection to RabbitMQ failed (try {Attempt})", attempt);
                 if (attempt >= maxRetries)
                 {
-                    logger.LogError("Maximum retry attempts reached ({MaxRetries}). Throwing exception.", maxRetries);
+                    logger.LogError("Reached maximum connection attempts ({MaxRetries}). Unable to proceed.", maxRetries);
                     throw;
                 }
                 await Task.Delay(delayMs, stoppingToken);
@@ -88,7 +88,7 @@ public class RabbitMqConsumer(
                 try
                 {
                     var json = Encoding.UTF8.GetString(ea.Body.ToArray());
-                    logger.LogInformation("Received message. RoutingKey: {RoutingKey}, Body: {Json}", ea.RoutingKey, json);
+                    logger.LogInformation("Message arrived from {RoutingKey}: {Json}", ea.RoutingKey, json);
 
                     await ProcessRequestAsync(json);
 
@@ -99,7 +99,7 @@ public class RabbitMqConsumer(
                 }
                 catch (Exception ex)
                 {
-                    logger.LogError(ex, "Error processing message");
+                    logger.LogError(ex, "Message processing failed");
                     await channel.BasicNackAsync(
                         ea.DeliveryTag,
                         multiple: false,
@@ -118,7 +118,7 @@ public class RabbitMqConsumer(
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
-            logger.LogCritical(ex, "RabbitMQ Consumer failed to start");
+            logger.LogCritical(ex, "RabbitMQ consumer startup failed");
             throw;
         }
     }
@@ -134,21 +134,21 @@ public class RabbitMqConsumer(
             var requestDto = JsonSerializer.Deserialize<RequestEditDto>(json);
             if (requestDto == null)
             {
-                logger.LogWarning("Received invalid request message: {Json}", json);
+                logger.LogWarning("Malformed request detected in message: {Json}", json);
                 return;
             }
 
             var client = await clientRepository.GetByIdAsync(requestDto.ClientId);
             if (client == null)
             {
-                logger.LogWarning("Client with ID {ClientId} not found. Skipping message.", requestDto.ClientId);
+                logger.LogWarning("Referenced client (ID {ClientId}) does not exist. Request discarded.", requestDto.ClientId);
                 return;
             }
 
             var property = await propertyRepository.GetByIdAsync(requestDto.PropertyId);
             if (property == null)
             {
-                logger.LogWarning("Property with ID {PropertyId} not found. Skipping message.", requestDto.PropertyId);
+                logger.LogWarning("Referenced property (ID {PropertyId}) does not exist. Request discarded.", requestDto.PropertyId);
                 return;
             }
 
@@ -159,12 +159,12 @@ public class RabbitMqConsumer(
 
             await requestRepository.AddAsync(request);
 
-            logger.LogInformation("Request successfully saved: ID not yet assigned, ClientId={ClientId}, PropertyId={PropertyId}, Type={Type}",
+            logger.LogInformation("Request persisted: ClientId={ClientId}, PropertyId={PropertyId}, RequestType={Type}",
                 requestDto.ClientId, requestDto.PropertyId, requestDto.Type);
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error processing request. Raw JSON: {Json}", json);
+            logger.LogError(ex, "Failed to process incoming request. Message content: {Json}", json);
             throw;
         }
     }

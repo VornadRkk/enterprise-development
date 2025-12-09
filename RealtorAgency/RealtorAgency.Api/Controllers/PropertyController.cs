@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using RealtorAgency.Application;
 using RealtorAgency.Application.Dtos.RepositoryDtos;
 using RealtorAgency.Domain.Entities;
-using RealtorAgency.Domain.Enums;
 using RealtorAgency.Domain.Interfaces;
 
 namespace RealtorAgency.Api.Controllers;
@@ -11,13 +10,13 @@ namespace RealtorAgency.Api.Controllers;
 /// <summary>
 /// Endpoints for managing properties.
 /// </summary>
-/// <param name="propertyRepository">Repository for accessing property data.</param>
-/// <param name="mapper">Mapper for dtos and entities.</param>
 [ApiController]
 [Route("api/properties")]
 public class PropertyController(
     IRepository<Property> propertyRepository,
-    IMapper mapper
+    ILogger<PropertyController> logger,
+    IMapper mapper,
+    IEnumValidationService enumValidationService
 ) : ControllerBase
 {
     /// <summary>
@@ -39,7 +38,8 @@ public class PropertyController(
     public async Task<ActionResult<PropertyGetDto>> GetPropertyById(int id)
     {
         var property = await propertyRepository.GetByIdAsync(id);
-        if (property == null) return NotFound();
+        if (property == null)
+            return NotFound();
 
         var propertyDto = mapper.Map<PropertyGetDto>(property);
         return Ok(propertyDto);
@@ -52,7 +52,15 @@ public class PropertyController(
     [HttpDelete("{id:int}")]
     public async Task<ActionResult> DeletePropertyById(int id)
     {
-        await propertyRepository.DeleteAsync(id);
+        try
+        {
+            await propertyRepository.DeleteAsync(id);
+        }
+        catch (KeyNotFoundException)
+        {
+            logger.LogWarning("Property with id {Id} not found for deletion", id);
+        }
+
         return NoContent();
     }
 
@@ -63,12 +71,14 @@ public class PropertyController(
     [HttpPost]
     public async Task<ActionResult<PropertyGetDto>> CreateProperty([FromBody] PropertyEditDto newPropertyDto)
     {
-        if (!ModelState.IsValid) return BadRequest(ModelState);
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
 
-        if (!Enum.IsDefined(typeof(PropertyType), newPropertyDto.Type))
-            return BadRequest($"Invalid property type: {newPropertyDto.Type}");
-        if (!Enum.IsDefined(typeof(Purpose), newPropertyDto.Purpose))
-            return BadRequest($"Invalid purpose: {newPropertyDto.Purpose}");
+        if (!enumValidationService.ValidatePropertyType(newPropertyDto.Type, out var propertyError))
+            return BadRequest(propertyError);
+
+        if (!enumValidationService.ValidatePurpose(newPropertyDto.Purpose, out var purposeError))
+            return BadRequest(purposeError);
 
         var newProperty = mapper.Map<Property>(newPropertyDto);
         await propertyRepository.AddAsync(newProperty);
@@ -85,19 +95,23 @@ public class PropertyController(
     [HttpPut("{id:int}")]
     public async Task<ActionResult> UpdateProperty(int id, [FromBody] PropertyEditDto updatedPropertyDto)
     {
-        if (!ModelState.IsValid) return BadRequest(ModelState);
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
 
-        if (!Enum.IsDefined(typeof(PropertyType), updatedPropertyDto.Type))
-            return BadRequest($"Invalid property type: {updatedPropertyDto.Type}");
-        if (!Enum.IsDefined(typeof(Purpose), updatedPropertyDto.Purpose))
-            return BadRequest($"Invalid purpose: {updatedPropertyDto.Purpose}");
+        if (!enumValidationService.ValidatePropertyType(updatedPropertyDto.Type, out var propertyError))
+            return BadRequest(propertyError);
+
+        if (!enumValidationService.ValidatePurpose(updatedPropertyDto.Purpose, out var purposeError))
+            return BadRequest(purposeError);
 
         var property = await propertyRepository.GetByIdAsync(id);
-        if (property == null) return NotFound();
+        if (property == null)
+            return NotFound();
 
         var updatedProperty = mapper.Map<Property>(updatedPropertyDto);
         updatedProperty.Id = property.Id;
         await propertyRepository.UpdateAsync(updatedProperty);
+
         return NoContent();
     }
 }

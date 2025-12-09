@@ -1,8 +1,9 @@
-﻿using RealtorAgency.Application.Dtos.RepositoryDtos;
-using AutoMapper;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using RealtorAgency.Application.Dtos.RepositoryDtos;
 using RealtorAgency.Domain.Entities;
 using RealtorAgency.Domain.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 
 namespace RealtorAgency.Api.Controllers;
 
@@ -10,11 +11,13 @@ namespace RealtorAgency.Api.Controllers;
 /// Endpoints for managing clients.
 /// </summary>
 /// <param name="clientRepository">Repository for accessing client data.</param>
+/// <param name="logger">The logger instance.</param>
 /// <param name="mapper">Mapper for dtos and entities.</param>
 [ApiController]
 [Route("api/clients")]
 public class ClientController(
     IRepository<Client> clientRepository,
+    ILogger<RequestController> logger,
     IMapper mapper
 ) : ControllerBase
 {
@@ -50,9 +53,18 @@ public class ClientController(
     [HttpDelete("{id:int}")]
     public async Task<ActionResult> DeleteClientById(int id)
     {
-        await clientRepository.DeleteAsync(id);
+        try
+        {
+            await clientRepository.DeleteAsync(id);
+        }
+        catch (KeyNotFoundException)
+        {
+            logger.LogWarning("Client with id {Id} not found for deletion", id);
+        }
+
         return NoContent();
     }
+
 
     /// <summary>
     /// Creates a new client.

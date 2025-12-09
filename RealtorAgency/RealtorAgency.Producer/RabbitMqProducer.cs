@@ -89,7 +89,7 @@ public class RabbitMqProducer(
             await using var connection = await ConnectWithRetryAsync(stoppingToken);
             await using var channel = await connection.CreateChannelAsync(cancellationToken: stoppingToken);
 
-            var delayMs = configuration.GetValue<int>("RABBITMQ_PUBLISH_DELAY_MS", 100);
+            var delayMs = configuration.GetValue("RabbitMqPublishDelayMs", 100);
 
             await channel.ExchangeDeclareAsync(
                 exchange: ExchangeName,

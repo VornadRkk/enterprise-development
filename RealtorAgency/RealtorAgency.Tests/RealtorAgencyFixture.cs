@@ -6,8 +6,6 @@ namespace RealtorAgency.Tests;
 public class RealtorAgencyFixture
 {
     public static List<Client> Clients => TestData.Clients;
-
     public static List<Property> Properties => TestData.Properties;
-
-    public List<Request> Requests => TestData.GetRequests(Clients, Properties);
+    public List<Request> Requests => TestData.Requests;
 }

@@ -44,11 +44,9 @@ public static class DbSeeder
     {
         if (!context.Requests.Any())
         {
-            var clients = await context.Clients.OrderBy(c => c.Id).ToListAsync();
-            var properties = await context.Properties.OrderBy(p => p.Id).ToListAsync();
-
-            context.Requests.AddRange(TestData.GetRequests(clients, properties));
+            context.Requests.AddRange(TestData.Requests);
             await context.SaveChangesAsync();
         }
     }
+
 }

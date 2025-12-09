@@ -5,8 +5,7 @@ var builder = Host.CreateApplicationBuilder(args);
 builder.AddServiceDefaults();
 builder.Services.AddSingleton<IConnectionFactory>(serviceProvider =>
 {
-    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-    var connectionString = configuration.GetConnectionString("RabbitMQ");
+    var connectionString = builder.Configuration.GetConnectionString("RabbitMQ");
 
     if (string.IsNullOrEmpty(connectionString))
     {

@@ -41,9 +41,9 @@ public class RealtorAgencyTest(RealtorAgencyFixture fixture) : IClassFixture<Rea
     [Fact]
     public void GetTopSellersByRequestCount_SeparateByType_ReturnsCorrectTop()
     {
-        var expectedTopSellerCount = 2;
+        var expectedTopSellerCount = 1;
         var expectedTopSellerName = "Ivanov Ivan Ivanovich";
-        var expectedTopBuyerCount = 3;
+        var expectedTopBuyerCount = 1;
         var expectedTopBuyerName = "Markelov Rodion Sergeevich";
 
         var topSellers = fixture.Requests
@@ -67,6 +67,7 @@ public class RealtorAgencyTest(RealtorAgencyFixture fixture) : IClassFixture<Rea
         Assert.Equal(expectedTopBuyerCount, topBuyers.First().Count);
         Assert.Equal(expectedTopBuyerName, topBuyers.First().Client.FullName);
     }
+
 
     /// <summary>
     /// Tests returns correct counts for each property type

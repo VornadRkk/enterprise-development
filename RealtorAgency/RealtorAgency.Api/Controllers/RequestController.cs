@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using RealtorAgency.Application;
 using RealtorAgency.Application.Dtos.RepositoryDtos;
 using RealtorAgency.Domain.Entities;
-using RealtorAgency.Domain.Enums;
 using RealtorAgency.Domain.Interfaces;
 
 namespace RealtorAgency.Api.Controllers;
@@ -18,7 +17,8 @@ public class RequestController(
     IRepository<Client> clientRepository,
     IRepository<Property> propertyRepository,
     ILogger<RequestController> logger,
-    IMapper mapper
+    IMapper mapper,
+    IEnumValidationService enumValidationService
 ) : ControllerBase
 {
     /// <summary>
@@ -64,8 +64,6 @@ public class RequestController(
         return NoContent();
     }
 
-
-
     /// <summary>
     /// Creates a new request.
     /// </summary>
@@ -83,7 +81,7 @@ public class RequestController(
         if (property == null)
             return NotFound("Property not found");
 
-        if (!ValidateRequestType(newRequestDto.Type, out var errorMessage))
+        if (!enumValidationService.ValidateRequestType(newRequestDto.Type, out var errorMessage))
             return BadRequest(errorMessage);
 
         var newRequest = mapper.Map<Request>(newRequestDto);
@@ -113,7 +111,7 @@ public class RequestController(
         if (property == null)
             return NotFound("Property not found");
 
-        if (!ValidateRequestType(updatedRequestDto.Type, out var errorMessage))
+        if (!enumValidationService.ValidateRequestType(updatedRequestDto.Type, out var errorMessage))
             return BadRequest(errorMessage);
 
         var request = await requestRepository.GetByIdAsync(id);
@@ -129,23 +127,5 @@ public class RequestController(
 
         var resultDto = mapper.Map<RequestGetDto>(updatedRequest);
         return Ok(resultDto);
-    }
-
-    /// <summary>
-    /// Validates the RequestType and returns error message with available options if invalid.
-    /// </summary>
-    private static bool ValidateRequestType(string type, out string errorMessage)
-    {
-        errorMessage = string.Empty;
-
-        var validTypes = Enum.GetNames(typeof(RequestType));
-
-        if (Enum.IsDefined(typeof(RequestType), type))
-            return true;
-
-        var validTypesString = string.Join(", ", validTypes);
-        errorMessage = $"Invalid request type: '{type}'. Allowed values: {validTypesString}";
-
-        return false;
     }
 }

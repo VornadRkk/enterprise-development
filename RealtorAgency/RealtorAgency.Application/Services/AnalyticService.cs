@@ -22,8 +22,8 @@ public class AnalyticsService(
         var requests = await requestRepository.GetAllAsync();
 
         var sellers = requests
-            .Where(r => r.Type == RequestType.Sale && r.Date >= start && r.Date <= end)
-            .Select(r => r.Client)
+            .Where(r => r.Type == RequestType.Sale && r.Date >= start && r.Date <= end && r.Client != null)
+            .Select(r => r.Client!)
             .DistinctBy(c => c.Id)
             .OrderBy(c => c.FullName)
             .ToList();
@@ -39,8 +39,8 @@ public class AnalyticsService(
         var requests = await requestRepository.GetAllAsync();
 
         var topClients = requests
-            .Where(r => r.Type == type)
-            .GroupBy(r => r.Client)
+            .Where(r => r.Type == type && r.Client != null)
+            .GroupBy(r => r.Client!)
             .Select(g => new ClientWithRequestCountDto
             {
                 Id = g.Key.Id,
@@ -64,7 +64,8 @@ public class AnalyticsService(
         var requests = await requestRepository.GetAllAsync();
 
         var counts = requests
-            .GroupBy(r => r.Property.Type)
+            .Where(r => r.Property != null)
+            .GroupBy(r => r.Property!.Type)
             .ToDictionary(
                 g => g.Key.ToString(),
                 g => g.Count()
@@ -80,16 +81,20 @@ public class AnalyticsService(
     {
         var requests = await requestRepository.GetAllAsync();
 
-        var minAmount = requests.Min(r => r.Amount);
+        var validRequests = requests.Where(r => r.Client != null).ToList();
+        if (!validRequests.Any())
+            return new List<ClientWithAmountDto>();
 
-        var clients = requests
-            .Where(r => r.Amount == minAmount)
+        var minAmount = validRequests.Min(r => r.Amount);
+
+        var clients = validRequests
+            .Where(r => r.Amount == minAmount && r.Client != null)
             .Select(r => new ClientWithAmountDto
             {
-                Id = r.Client.Id,
-                FullName = r.Client.FullName,
-                PassportNumber = r.Client.PassportNumber,
-                ContactPhone = r.Client.ContactPhone,
+                Id = r.Client!.Id,
+                FullName = r.Client!.FullName,
+                PassportNumber = r.Client!.PassportNumber,
+                ContactPhone = r.Client!.ContactPhone,
                 Amount = r.Amount
             })
             .DistinctBy(c => c.Id)
@@ -106,8 +111,8 @@ public class AnalyticsService(
         var requests = await requestRepository.GetAllAsync();
 
         var clients = requests
-            .Where(r => r.Type == RequestType.Purchase && r.Property.Type == propertyType)
-            .Select(r => r.Client)
+            .Where(r => r.Type == RequestType.Purchase && r.Property != null && r.Property.Type == propertyType && r.Client != null)
+            .Select(r => r.Client!)
             .DistinctBy(c => c.Id)
             .OrderBy(c => c.FullName)
             .ToList();
@@ -123,8 +128,8 @@ public class AnalyticsService(
         var requests = await requestRepository.GetAllAsync();
 
         var topPropertyTypes = requests
-            .Where(r => r.Date >= start && r.Date <= end)
-            .GroupBy(r => r.Property.Type)
+            .Where(r => r.Date >= start && r.Date <= end && r.Property != null)
+            .GroupBy(r => r.Property!.Type)
             .Select(g => new PropertyTypeDto
             {
                 PropertyType = g.Key.ToString(),
@@ -145,7 +150,8 @@ public class AnalyticsService(
         var requests = await requestRepository.GetAllAsync();
 
         var clientsWithMaxAmount = requests
-            .GroupBy(r => r.Client)
+            .Where(r => r.Client != null)
+            .GroupBy(r => r.Client!)
             .Select(g => new ClientWithAmountDto
             {
                 Id = g.Key.Id,

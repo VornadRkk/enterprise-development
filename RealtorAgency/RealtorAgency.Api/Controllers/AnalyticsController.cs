@@ -13,8 +13,6 @@ namespace RealtorAgency.Api.Controllers;
 [Route("api/analytics")]
 public class AnalyticsController(IAnalyticsService analyticsService) : ControllerBase
 {
-    private readonly IAnalyticsService _analyticsService = analyticsService;
-
     /// <summary>
     /// Returns all sellers (clients with sale requests) within a specified date range.
     /// </summary>
@@ -23,7 +21,7 @@ public class AnalyticsController(IAnalyticsService analyticsService) : Controlle
     [HttpGet("sellers")]
     public async Task<ActionResult<List<ClientDto>>> GetSellersInPeriod([FromQuery] DateTime start, [FromQuery] DateTime end)
     {
-        var result = await _analyticsService.GetSellersInPeriodAsync(start, end);
+        var result = await analyticsService.GetSellersInPeriodAsync(start, end);
         return Ok(result);
     }
 
@@ -33,7 +31,7 @@ public class AnalyticsController(IAnalyticsService analyticsService) : Controlle
     [HttpGet("top-sellers")]
     public async Task<ActionResult<List<ClientWithRequestCountDto>>> GetTopSellers()
     {
-        var result = await _analyticsService.GetTopClientsByRequestCountAsync(RequestType.Sale);
+        var result = await analyticsService.GetTopClientsByRequestCountAsync(RequestType.Sale);
         return Ok(result);
     }
 
@@ -43,7 +41,7 @@ public class AnalyticsController(IAnalyticsService analyticsService) : Controlle
     [HttpGet("top-buyers")]
     public async Task<ActionResult<List<ClientWithRequestCountDto>>> GetTopBuyers()
     {
-        var result = await _analyticsService.GetTopClientsByRequestCountAsync(RequestType.Purchase);
+        var result = await analyticsService.GetTopClientsByRequestCountAsync(RequestType.Purchase);
         return Ok(result);
     }
 
@@ -53,7 +51,7 @@ public class AnalyticsController(IAnalyticsService analyticsService) : Controlle
     [HttpGet("requests-by-property-type")]
     public async Task<ActionResult<Dictionary<string, int>>> GetRequestCountByPropertyType()
     {
-        var result = await _analyticsService.GetRequestCountByPropertyTypeAsync();
+        var result = await analyticsService.GetRequestCountByPropertyTypeAsync();
         return Ok(result);
     }
 
@@ -63,7 +61,7 @@ public class AnalyticsController(IAnalyticsService analyticsService) : Controlle
     [HttpGet("clients-min-amount")]
     public async Task<ActionResult<List<ClientWithAmountDto>>> GetClientsWithMinAmount()
     {
-        var result = await _analyticsService.GetClientsWithMinAmountRequestAsync();
+        var result = await analyticsService.GetClientsWithMinAmountRequestAsync();
         return Ok(result);
     }
 
@@ -74,7 +72,7 @@ public class AnalyticsController(IAnalyticsService analyticsService) : Controlle
     [HttpGet("clients-searching")]
     public async Task<ActionResult<List<ClientDto>>> GetClientsSearchingForPropertyType([FromQuery] PropertyType propertyType)
     {
-        var result = await _analyticsService.GetClientsSearchingForPropertyTypeAsync(propertyType);
+        var result = await analyticsService.GetClientsSearchingForPropertyTypeAsync(propertyType);
         return Ok(result);
     }
 
@@ -86,7 +84,7 @@ public class AnalyticsController(IAnalyticsService analyticsService) : Controlle
     {
         var end = DateTime.Now;
         var start = end.AddYears(-1);
-        var result = await _analyticsService.GetTopPropertyTypesByPeriodAsync(start, end);
+        var result = await analyticsService.GetTopPropertyTypesByPeriodAsync(start, end);
         return Ok(result);
     }
 
@@ -96,7 +94,7 @@ public class AnalyticsController(IAnalyticsService analyticsService) : Controlle
     [HttpGet("clients-max-amount")]
     public async Task<ActionResult<List<ClientWithAmountDto>>> GetClientsWithMaxTotalAmount()
     {
-        var result = await _analyticsService.GetClientsWithMaxTotalAmountAsync();
+        var result = await analyticsService.GetClientsWithMaxTotalAmountAsync();
         return Ok(result);
     }
 }

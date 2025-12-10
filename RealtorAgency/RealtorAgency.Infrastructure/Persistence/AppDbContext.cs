@@ -108,6 +108,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             r.Property(r => r.Id)
                 .HasColumnName("id")
                 .ValueGeneratedOnAdd();
+            r.Property(r => r.ClientId)
+                .HasColumnName("client_id")
+                .IsRequired();
+            r.Property(r => r.PropertyId)
+                .HasColumnName("property_id")
+                .IsRequired();
             r.Property(r => r.Type)
                 .HasColumnName("type")
                 .HasConversion<string>()
@@ -122,11 +128,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
             r.HasOne(r => r.Client)
                 .WithMany()
-                .HasForeignKey("client_id")
+                .HasForeignKey(r => r.ClientId)
                 .OnDelete(DeleteBehavior.Cascade);
             r.HasOne(r => r.Property)
                 .WithMany()
-                .HasForeignKey("property_id")
+                .HasForeignKey(r => r.PropertyId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
     }

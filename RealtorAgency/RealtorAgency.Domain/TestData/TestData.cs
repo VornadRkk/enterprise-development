@@ -240,8 +240,8 @@ public static class TestData
         new()
         {
             Id = 1,
-            Client = Clients[0], 
-            Property = Properties[0], 
+            ClientId = 1,
+            PropertyId = 1, 
             Type = RequestType.Sale,
             Amount = 5_000_000,
             Date = new DateTime(2024, 1, 15)
@@ -249,8 +249,8 @@ public static class TestData
         new()
         {
             Id = 2,
-            Client = Clients[1],
-            Property = Properties[1],
+            ClientId = 2,
+            PropertyId = 2,
             Type = RequestType.Sale,
             Amount = 15_000_000,
             Date = new DateTime(2024, 3, 20)
@@ -258,8 +258,8 @@ public static class TestData
         new()
         {
             Id = 3,
-            Client = Clients[2],
-            Property = Properties[2],
+            ClientId = 3,
+            PropertyId = 3,
             Type = RequestType.Sale,
             Amount = 10_000_000,
             Date = new DateTime(2024, 5, 10)
@@ -267,8 +267,8 @@ public static class TestData
         new()
         {
             Id = 4,
-            Client = Clients[0],
-            Property = Properties[1],
+            ClientId = 1,
+            PropertyId = 2,
             Type = RequestType.Sale,
             Amount = 14_000_000,
             Date = new DateTime(2024, 7, 5)
@@ -276,8 +276,8 @@ public static class TestData
         new()
         {
             Id = 5,
-            Client = Clients[3],
-            Property = Properties[0],
+            ClientId = 4,
+            PropertyId = 1,
             Type = RequestType.Purchase,
             Amount = 4_500_000,
             Date = new DateTime(2024, 2, 12)
@@ -285,8 +285,8 @@ public static class TestData
         new()
         {
             Id = 6,
-            Client = Clients[4],
-            Property = Properties[0],
+            ClientId = 5,
+            PropertyId = 1,
             Type = RequestType.Purchase,
             Amount = 4_800_000,
             Date = new DateTime(2024, 4, 18)
@@ -294,8 +294,8 @@ public static class TestData
         new()
         {
             Id = 7,
-            Client = Clients[3],
-            Property = Properties[2],
+            ClientId = 4,
+            PropertyId = 3,
             Type = RequestType.Purchase,
             Amount = 9_500_000,
             Date = new DateTime(2024, 6, 22)
@@ -303,8 +303,8 @@ public static class TestData
         new()
         {
             Id = 8,
-            Client = Clients[3],
-            Property = Properties[1],
+            ClientId = 4,
+            PropertyId = 2,
             Type = RequestType.Purchase,
             Amount = 14_200_000,
             Date = new DateTime(2024, 8, 30)
@@ -312,8 +312,8 @@ public static class TestData
         new()
         {
             Id = 9,
-            Client = Clients[5],
-            Property = Properties[3],
+            ClientId = 6,
+            PropertyId = 4,
             Type = RequestType.Sale,
             Amount = 7_200_000,
             Date = new DateTime(2024, 9, 10)
@@ -321,8 +321,8 @@ public static class TestData
         new()
         {
             Id = 10,
-            Client = Clients[6],
-            Property = Properties[4],
+            ClientId = 7,
+            PropertyId = 5,
             Type = RequestType.Purchase,
             Amount = 18_500_000,
             Date = new DateTime(2024, 10, 25)

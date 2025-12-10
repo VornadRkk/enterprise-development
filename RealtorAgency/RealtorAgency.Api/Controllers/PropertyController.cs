@@ -15,8 +15,7 @@ namespace RealtorAgency.Api.Controllers;
 public class PropertyController(
     IRepository<Property> propertyRepository,
     ILogger<PropertyController> logger,
-    IMapper mapper,
-    IEnumValidationService enumValidationService
+    IMapper mapper
 ) : ControllerBase
 {
     /// <summary>
@@ -74,10 +73,10 @@ public class PropertyController(
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        if (!enumValidationService.ValidatePropertyType(newPropertyDto.Type, out var propertyError))
+        if (!EnumValidator.ValidatePropertyType(newPropertyDto.Type, out var propertyError))
             return BadRequest(propertyError);
 
-        if (!enumValidationService.ValidatePurpose(newPropertyDto.Purpose, out var purposeError))
+        if (!EnumValidator.ValidatePurpose(newPropertyDto.Purpose, out var purposeError))
             return BadRequest(purposeError);
 
         var newProperty = mapper.Map<Property>(newPropertyDto);
@@ -98,10 +97,10 @@ public class PropertyController(
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        if (!enumValidationService.ValidatePropertyType(updatedPropertyDto.Type, out var propertyError))
+        if (!EnumValidator.ValidatePropertyType(updatedPropertyDto.Type, out var propertyError))
             return BadRequest(propertyError);
 
-        if (!enumValidationService.ValidatePurpose(updatedPropertyDto.Purpose, out var purposeError))
+        if (!EnumValidator.ValidatePurpose(updatedPropertyDto.Purpose, out var purposeError))
             return BadRequest(purposeError);
 
         var property = await propertyRepository.GetByIdAsync(id);
@@ -114,4 +113,5 @@ public class PropertyController(
 
         return NoContent();
     }
+
 }

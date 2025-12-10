@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RealtorAgency.Domain.TestData;
+﻿using RealtorAgency.Domain.TestData;
 
 namespace RealtorAgency.Infrastructure.Persistence;
 
@@ -49,4 +48,4 @@ public static class DbSeeder
         }
     }
 
-}
+}   

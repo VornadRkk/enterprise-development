@@ -17,8 +17,7 @@ public class RequestController(
     IRepository<Client> clientRepository,
     IRepository<Property> propertyRepository,
     ILogger<RequestController> logger,
-    IMapper mapper,
-    IEnumValidationService enumValidationService
+    IMapper mapper
 ) : ControllerBase
 {
     /// <summary>
@@ -81,7 +80,7 @@ public class RequestController(
         if (property == null)
             return NotFound("Property not found");
 
-        if (!enumValidationService.ValidateRequestType(newRequestDto.Type, out var errorMessage))
+        if (!EnumValidator.ValidateRequestType(newRequestDto.Type, out var errorMessage))
             return BadRequest(errorMessage);
 
         var newRequest = mapper.Map<Request>(newRequestDto);
@@ -111,7 +110,7 @@ public class RequestController(
         if (property == null)
             return NotFound("Property not found");
 
-        if (!enumValidationService.ValidateRequestType(updatedRequestDto.Type, out var errorMessage))
+        if (!EnumValidator.ValidateRequestType(updatedRequestDto.Type, out var errorMessage))
             return BadRequest(errorMessage);
 
         var request = await requestRepository.GetByIdAsync(id);
@@ -128,4 +127,5 @@ public class RequestController(
         var resultDto = mapper.Map<RequestGetDto>(updatedRequest);
         return Ok(resultDto);
     }
+
 }

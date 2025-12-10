@@ -28,12 +28,7 @@ builder.Services.AddAutoMapper(config =>
 
 builder.Services.AddSingleton<IConnectionFactory>(serviceProvider =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("RabbitMQ");
-
-    if (string.IsNullOrEmpty(connectionString))
-    {
-        throw new InvalidOperationException("RabbitMQ connection string is not configured");
-    }
+    var connectionString = builder.Configuration.GetConnectionString("RabbitMQ") ?? throw new InvalidOperationException("RabbitMQ connection string is not configured");
 
     return new ConnectionFactory
     {
@@ -46,7 +41,6 @@ builder.Services.AddHostedService<RabbitMqConsumer>();
 builder.Services.AddScoped<IRepository<Client>, ClientRepository>();
 builder.Services.AddScoped<IRepository<Property>, PropertyRepository>();
 builder.Services.AddScoped<IRepository<Request>, RequestRepository>();
-builder.Services.AddScoped<IEnumValidationService, EnumValidationService>();
 
 
 builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();

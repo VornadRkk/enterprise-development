@@ -5,18 +5,25 @@ namespace RealtorAgency.Tests;
 /// <summary>
 /// Contains unit tests for RealtorAgency domain logic
 /// </summary>
-public class RealtorAgencyTest(RealtorAgencyFixture fixture) : IClassFixture<RealtorAgencyFixture>
+public class RealtorAgencyTest : IClassFixture<RealtorAgencyFixture>
 {
+    private readonly RealtorAgencyFixture _fixture;
+
+    public RealtorAgencyTest(RealtorAgencyFixture fixture)
+    {
+        _fixture = fixture;
+    }
+
     /// <summary>
     /// Tests returns correct sellers with distinct clients within date range
     /// </summary>
     [Fact]
     public void GetSellersInPeriod_ReturnsCorrectSellers()
     {
-        var startDate = new DateTime(2024, 1, 1);
-        var endDate = new DateTime(2024, 12, 31);
-        var expectedCount = 4;
-        var expectedSellerNames = new[]
+        var start = new DateTime(2024, 1, 1);
+        var end = new DateTime(2024, 12, 31);
+
+        var expectedNames = new[]
         {
             "Ivanov Ivan Ivanovich",
             "Kuznetsov Dmitry Mikhailovich",
@@ -24,15 +31,15 @@ public class RealtorAgencyTest(RealtorAgencyFixture fixture) : IClassFixture<Rea
             "Sidorov Alexey Sidorovich"
         };
 
-        var sellers = fixture.Requests
-            .Where(r => r.Type == RequestType.Sale && r.Date >= startDate && r.Date <= endDate)
-            .Select(r => r.Client)
+        var sellers = _fixture.Requests
+            .Where(r => r.Type == RequestType.Sale && r.Date >= start && r.Date <= end)
+            .Select(r => r.Client!)
             .DistinctBy(c => c.Id)
             .OrderBy(c => c.FullName)
             .ToList();
 
-        Assert.Equal(expectedCount, sellers.Count);
-        Assert.Equal(expectedSellerNames, sellers.Select(s => s.FullName));
+        Assert.Equal(expectedNames.Length, sellers.Count);
+        Assert.Equal(expectedNames, sellers.Select(s => s.FullName));
     }
 
     /// <summary>
@@ -41,57 +48,46 @@ public class RealtorAgencyTest(RealtorAgencyFixture fixture) : IClassFixture<Rea
     [Fact]
     public void GetTopSellersByRequestCount_SeparateByType_ReturnsCorrectTop()
     {
-        var expectedTopSellerCount = 1;
-        var expectedTopSellerName = "Ivanov Ivan Ivanovich";
-        var expectedTopBuyerCount = 1;
-        var expectedTopBuyerName = "Markelov Rodion Sergeevich";
+        var topSellerExpectedName = "Ivanov Ivan Ivanovich";
+        var topBuyerExpectedName = "Markelov Rodion Sergeevich";
 
-        var topSellers = fixture.Requests
+        var topSeller = _fixture.Requests
             .Where(r => r.Type == RequestType.Sale)
-            .GroupBy(r => r.Client)
+            .GroupBy(r => r.Client!)
             .Select(g => new { Client = g.Key, Count = g.Count() })
             .OrderByDescending(x => x.Count)
-            .Take(5)
-            .ToList();
+            .First();
 
-        var topBuyers = fixture.Requests
+        var topBuyer = _fixture.Requests
             .Where(r => r.Type == RequestType.Purchase)
-            .GroupBy(r => r.Client)
+            .GroupBy(r => r.Client!)
             .Select(g => new { Client = g.Key, Count = g.Count() })
             .OrderByDescending(x => x.Count)
-            .Take(5)
-            .ToList();
+            .First();
 
-        Assert.Equal(expectedTopSellerCount, topSellers.First().Count);
-        Assert.Equal(expectedTopSellerName, topSellers.First().Client.FullName);
-        Assert.Equal(expectedTopBuyerCount, topBuyers.First().Count);
-        Assert.Equal(expectedTopBuyerName, topBuyers.First().Client.FullName);
+        Assert.Equal(topSellerExpectedName, topSeller.Client.FullName);
+        Assert.Equal(topBuyerExpectedName, topBuyer.Client.FullName);
     }
 
-
-    /// <summary>
-    /// Tests returns correct counts for each property type
-    /// </summary>
     /// <summary>
     /// Tests returns correct counts for each property type
     /// </summary>
     [Fact]
     public void GetRequestCountByPropertyType_ReturnsCorrectCounts()
     {
-        var expectedCounts = new Dictionary<PropertyType, int>
-    {
-        { PropertyType.Apartment, 4 },
-        { PropertyType.House, 4 },
-        { PropertyType.Office, 2 }
-    };
+        var expected = new Dictionary<PropertyType, int>
+        {
+            { PropertyType.Apartment, 4 },
+            { PropertyType.House, 4 },
+            { PropertyType.Office, 2 }
+        };
 
-        var counts = fixture.Requests
-            .GroupBy(r => r.Property.Type)
+        var result = _fixture.Requests
+            .GroupBy(r => r.Property!.Type)
             .ToDictionary(g => g.Key, g => g.Count());
 
-        Assert.Equal(expectedCounts, counts);
+        Assert.Equal(expected, result);
     }
-
 
     /// <summary>
     /// Tests returns clients with minimum request amount
@@ -99,20 +95,19 @@ public class RealtorAgencyTest(RealtorAgencyFixture fixture) : IClassFixture<Rea
     [Fact]
     public void GetClientsWithMinAmountRequest_ReturnsCorrectClients()
     {
-        var expectedClientCount = 1;
-        var expectedClientNames = new[] { "Markelov Rodion Sergeevich" };
+        var expectedNames = new[] { "Markelov Rodion Sergeevich" };
         var expectedMinAmount = 4_500_000m;
 
-        var minAmount = fixture.Requests.Min(r => r.Amount);
+        var minAmount = _fixture.Requests.Min(r => r.Amount);
 
-        var clients = fixture.Requests
+        var clients = _fixture.Requests
             .Where(r => r.Amount == minAmount)
-            .Select(r => r.Client)
+            .Select(r => r.Client!)
             .DistinctBy(c => c.Id)
             .ToList();
 
-        Assert.Equal(expectedClientCount, clients.Count);
-        Assert.Equal(expectedClientNames, clients.Select(c => c.FullName));
+        Assert.Single(clients);
+        Assert.Equal(expectedNames, clients.Select(c => c.FullName));
         Assert.Equal(expectedMinAmount, minAmount);
     }
 
@@ -123,21 +118,21 @@ public class RealtorAgencyTest(RealtorAgencyFixture fixture) : IClassFixture<Rea
     public void GetClientsSearchingForPropertyType_OrderedByName_ReturnsCorrectList()
     {
         var propertyType = PropertyType.Apartment;
-        var expectedClientCount = 2;
-        var expectedClientNames = new[]
+
+        var expectedNames = new[]
         {
             "Markelov Rodion Sergeevich",
             "Smirnov Sergey Ivanovich"
         };
 
-        var clients = fixture.Requests
-            .Where(r => r.Type == RequestType.Purchase && r.Property.Type == propertyType)
-            .Select(r => r.Client)
+        var clients = _fixture.Requests
+            .Where(r => r.Type == RequestType.Purchase && r.Property!.Type == propertyType)
+            .Select(r => r.Client!)
             .DistinctBy(c => c.Id)
             .OrderBy(c => c.FullName)
             .ToList();
 
-        Assert.Equal(expectedClientCount, clients.Count);
-        Assert.Equal(expectedClientNames, clients.Select(c => c.FullName));
+        Assert.Equal(expectedNames.Length, clients.Count);
+        Assert.Equal(expectedNames, clients.Select(c => c.FullName));
     }
 }

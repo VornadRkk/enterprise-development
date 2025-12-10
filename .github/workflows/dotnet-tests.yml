@@ -25,4 +25,4 @@ jobs:
         run: dotnet build ./RealtorAgency/RealtorAgency.sln --no-restore --configuration Release
 
       - name: Test
-        run: dotnet test ./RealtorAgency/Tests/Tests.csproj --configuration Release --verbosity normal
+        run: dotnet test ./RealtorAgency/RealtorAgency.Tests/RealtorAgency.Tests.csproj --configuration Release --verbosity normal

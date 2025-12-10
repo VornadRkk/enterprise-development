@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using RealtorAgency.Application.Dtos.RepositoryDtos;
 using RealtorAgency.Domain.Entities;
 using RealtorAgency.Domain.Interfaces;

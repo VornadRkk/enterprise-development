@@ -130,26 +130,28 @@ namespace RealtorAgency.Infrastructure.Migrations
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("amount");
 
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int")
+                        .HasColumnName("client_id");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("date");
+
+                    b.Property<int>("PropertyId")
+                        .HasColumnType("int")
+                        .HasColumnName("property_id");
 
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("type");
 
-                    b.Property<int>("client_id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("property_id")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("client_id");
+                    b.HasIndex("ClientId");
 
-                    b.HasIndex("property_id");
+                    b.HasIndex("PropertyId");
 
                     b.ToTable("requests", (string)null);
                 });
@@ -158,13 +160,13 @@ namespace RealtorAgency.Infrastructure.Migrations
                 {
                     b.HasOne("RealtorAgency.Domain.Entities.Client", "Client")
                         .WithMany()
-                        .HasForeignKey("client_id")
+                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("RealtorAgency.Domain.Entities.Property", "Property")
                         .WithMany()
-                        .HasForeignKey("property_id")
+                        .HasForeignKey("PropertyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

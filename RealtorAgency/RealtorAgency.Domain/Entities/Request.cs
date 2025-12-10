@@ -10,16 +10,19 @@ public class Request
     /// Unique identifier of the request.
     /// </summary>
     public int Id { get; set; }
+    public int ClientId { get; set; }
 
     /// <summary>
     /// Client associated with the request.
     /// </summary>
-    public required Client Client { get; set; }
+    public  Client? Client { get; set; }
+
+    public int PropertyId { get; set; }
 
     /// <summary>
     /// Property associated with the request.
     /// </summary>
-    public required Property Property { get; set; }
+    public Property? Property { get; set; }
 
     /// <summary>
     /// Type of the request (sale or purchase).

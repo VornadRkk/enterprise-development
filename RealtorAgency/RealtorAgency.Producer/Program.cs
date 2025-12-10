@@ -5,12 +5,7 @@ var builder = Host.CreateApplicationBuilder(args);
 builder.AddServiceDefaults();
 builder.Services.AddSingleton<IConnectionFactory>(serviceProvider =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("RabbitMQ");
-
-    if (string.IsNullOrEmpty(connectionString))
-    {
-        throw new InvalidOperationException("RabbitMQ connection string is not configured");
-    }
+    var connectionString = builder.Configuration.GetConnectionString("RabbitMQ") ?? throw new InvalidOperationException("RabbitMQ connection string is not configured");
 
     return new ConnectionFactory
     {

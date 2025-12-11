@@ -17,6 +17,6 @@ builder.AddProject<Projects.RealtorAgency_Api>("RealtorAgencyApi")
 builder.AddProject<Projects.RealtorAgency_Producer>("RealtorAgencyProducer")
     .WithReference(rabbitMq)                      
     .WaitFor(rabbitMq)
-    .WithEnvironment("RABBITMQPUBLISHDELAYMS", "100");
+    .WithEnvironment("RabbitMqPublishDelayMs", "100");
 
 builder.Build().Run();
